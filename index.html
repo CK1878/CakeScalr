@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Professional Cake Scaling Calculator</title>
+    <title>The Cake Forge - Professional Recipe Scaler</title>
     <!-- Tailwind CSS for sleek, professional styling -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <style>
@@ -17,16 +17,55 @@
 </head>
 <body class="bg-slate-50 text-slate-800 font-sans antialiased min-h-screen pb-24">
 
-    <!-- Header -->
-    <header class="bg-white border-b border-slate-200 py-6 px-4 mb-8 shadow-xs">
+    <!-- Header / Brand Navigation -->
+    <header class="bg-white border-b border-slate-200 py-5 px-4 mb-8 shadow-xs">
         <div class="max-w-4xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
-            <div>
-                <h1 class="text-2xl font-bold tracking-tight text-slate-900">BakeScale Pro</h1>
-                <p class="text-sm text-slate-500">Multi-component recipe & tin size transformer</p>
+            
+            <!-- Logo Section based on "The Cake Forge" Alternate Layout -->
+            <div class="flex items-center gap-4">
+                <!-- Custom SVG recreating the anvil, tiered cake, and spark rays emblem -->
+                <svg class="w-14 h-14 text-slate-800 flex-shrink-0" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <!-- Circular Outer Border Ring -->
+                    <circle cx="50" cy="42" r="32" stroke-width="1.5" />
+                    
+                    <!-- Radiating Spark Lines -->
+                    <line x1="50" y1="5" x2="50" y2="9" />
+                    <line x1="24" y1="16" x2="27" y2="19" />
+                    <line x1="76" y1="16" x2="73" y2="19" />
+                    <line x1="13" y1="42" x2="17" y2="42" />
+                    <line x1="87" y1="42" x2="83" y2="42" />
+                    <line x1="20" y1="30" x2="24" y2="31" />
+                    <line x1="80" y1="30" x2="76" y2="31" />
+                    <line x1="22" y1="55" x2="26" y2="52" />
+                    <line x1="78" y1="55" x2="74" y2="52" />
+                    
+                    <!-- 3-Tiered Cake with Top Candle -->
+                    <line x1="50" y1="17" x2="50" y2="19" stroke-width="1.5" /> <!-- Flame/Wick -->
+                    <rect x="42" y="19" width="16" height="6" rx="1" fill="currentColor" /> <!-- Top Tier -->
+                    <rect x="38" y="25" width="24" height="7" rx="1" fill="currentColor" /> <!-- Mid Tier -->
+                    <rect x="34" y="32" width="32" height="9" rx="1" fill="currentColor" /> <!-- Base Tier -->
+                    
+                    <!-- Signature Anvil Base -->
+                    <path d="M 30,41 L 70,41 L 70,45 L 62,49 L 62,56 C 62,59 66,61 68,62 L 68,64 L 32,64 L 32,62 C 34,61 38,59 38,56 L 38,49 L 24,45 Z" fill="currentColor" stroke-linejoin="miter" />
+                </svg>
+                
+                <div>
+                    <h1 class="text-xl font-serif font-semibold tracking-wider text-slate-900 uppercase">The Cake Forge</h1>
+                    <p class="text-xs uppercase tracking-widest text-slate-400 font-medium">Bespoke Cake Artistry • Scaler</p>
+                </div>
             </div>
-            <button onclick="window.print()" class="no-print bg-slate-900 hover:bg-slate-800 text-white text-sm font-medium py-2 px-4 rounded-lg shadow-xs transition-colors cursor-pointer">
-                Print Recipe Sheet
-            </button>
+
+            <!-- Socials & Print Action Controls -->
+            <div class="flex items-center gap-4 no-print">
+                <!-- Social Links Placeholder Layout (Ready for URLs later) -->
+                <nav class="flex gap-3 text-xs font-medium text-slate-400 border-r border-slate-200 pr-4 mr-1">
+                    <a href="#" class="hover:text-slate-600 transition-colors">Website</a>
+                    <a href="#" class="hover:text-slate-600 transition-colors">Instagram</a>
+                </nav>
+                <button onclick="window.print()" class="bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold py-2 px-4 rounded-lg shadow-xs transition-colors cursor-pointer tracking-wide">
+                    Print Sheet
+                </button>
+            </div>
         </div>
     </header>
 
@@ -89,19 +128,18 @@
             <!-- Dynamic Components will render here -->
         </div>
 
-        <!-- CONTEXTUAL MONETIZATION TRIGGER (Amazon Affiliate Box) -->
+        <!-- DYNAMIC CONTEXTUAL MONETIZATION TRIGGER -->
         <section class="no-print bg-amber-50/60 border border-amber-200/80 rounded-xl p-5 shadow-xs grid sm:grid-cols-3 gap-4 items-center">
             <div class="sm:col-span-2">
-                <h3 class="text-sm font-bold text-amber-900 flex items-center gap-1.5">
-                    <span class="text-base">⚖️</span> Precision Scaling Tip
+                <h3 class="text-sm font-bold text-amber-900 flex items-center gap-1.5" id="adTitle">
+                    ⚖️ Precision Scaling Tip
                 </h3>
-                <p class="text-xs text-amber-800 mt-1 leading-relaxed">
+                <p class="text-xs text-amber-800 mt-1 leading-relaxed" id="adText">
                     When scaling recipes, you'll often end up with fractions of an egg (e.g., 2.4 eggs). The absolute easiest way to handle this is by lightly whisking your eggs in a jug and using an accurate digital kitchen scale to measure the exact amount.
                 </p>
             </div>
             <div class="text-center sm:text-right">
-                <!-- !!! UPDATE TAG VALUE LATER !!! -->
-                <a href="https://www.amazon.co.uk/s?k=digital+kitchen+scales+0.1g&tag=YOUR_AMAZON_TAG_HERE" target="_blank" rel="noopener" class="inline-block bg-amber-700 hover:bg-amber-800 text-white text-xs font-semibold py-2 px-4 rounded-lg shadow-xs transition-colors cursor-pointer">
+                <a href="https://www.amazon.co.uk/s?k=digital+kitchen+scales+0.1g&tag=YOUR_AMAZON_TAG_HERE" id="adLink" target="_blank" rel="noopener" class="inline-block bg-amber-700 hover:bg-amber-800 text-white text-xs font-semibold py-2 px-4 rounded-lg shadow-xs transition-colors cursor-pointer">
                     View Recommended Scales →
                 </a>
             </div>
@@ -122,7 +160,7 @@
 
         <!-- PRINT ONLY FOOTER -->
         <footer class="hidden print:block text-center text-xs text-slate-400 mt-12 border-t border-slate-200 pt-4">
-            Recipe scaled perfectly using <strong>BakeScale Pro</strong>.<br>
+            Recipe scaled perfectly using the <strong>The Cake Forge</strong> toolkit.<br>
             Saved you from a baking disaster? Consider tipping a bag of flour at: buymeacoffee.com/YOUR_USERNAME
         </footer>
 
@@ -130,7 +168,6 @@
 
     <!-- FLOATING "BUY ME A BAG OF FLOUR" TIPPING WIDGET -->
     <div class="fixed bottom-4 right-4 z-50 no-print">
-        <!-- !!! UPDATE URL LATER !!! -->
         <a href="https://www.buymeacoffee.com/YOUR_USERNAME" target="_blank" rel="noopener" class="flex items-center gap-2 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold py-2.5 px-4 rounded-full shadow-lg transition-all hover:scale-105 cursor-pointer border border-slate-700/50">
             <span class="text-sm">🌾</span> 
             <span>Buy me a bag of flour</span>
@@ -203,12 +240,14 @@
             recipeData.push({ id: compId, name: name, ingredients: ingredients });
             renderApp();
             calculateScale();
+            evaluateAllKeywords();
         }
 
         function deleteComponent(compId) {
             recipeData = recipeData.filter(c => c.id !== compId);
             renderApp();
             calculateScale();
+            evaluateAllKeywords();
         }
 
         function addIngredientRow(compId) {
@@ -226,6 +265,7 @@
                 comp.ingredients.splice(ingIndex, 1);
                 renderApp();
                 calculateScale();
+                evaluateAllKeywords();
             }
         }
 
@@ -236,14 +276,54 @@
                     comp.ingredients[index][field] = parseFloat(value) || 0;
                 } else {
                     comp.ingredients[index][field] = value;
+                    evaluateAllKeywords();
                 }
                 silentScaleCalculate();
             }
         }
 
+        function evaluateAllKeywords() {
+            let combinedText = "";
+            recipeData.forEach(c => {
+                combinedText += " " + c.name;
+                c.ingredients.forEach(i => {
+                    combinedText += " " + i.name;
+                });
+            });
+
+            const lowerText = combinedText.toLowerCase();
+            const adTitle = document.getElementById('adTitle');
+            const adText = document.getElementById('adText');
+            const adLink = document.getElementById('adLink');
+            
+            if (!adTitle || !adText || !adLink) return;
+
+            if (lowerText.includes('chocolate') || lowerText.includes('ganache') || lowerText.includes('callets') || lowerText.includes('cocoa')) {
+                adTitle.innerHTML = '🍫 Pro Chocolate Tip';
+                adText.innerText = 'For a perfectly smooth, glossy emulsion that sets beautifully, choose professional couverture chocolate callets rather than melting standard grocery blocks.';
+                adLink.innerText = 'View Premium Couverture Supplies →';
+                adLink.href = 'https://www.amazon.co.uk/s?k=couverture+chocolate+callets&tag=YOUR_AMAZON_TAG_HERE';
+            } 
+            else if (lowerText.includes('buttercream') || lowerText.includes('icing') || lowerText.includes('frosting') || lowerText.includes('sugar')) {
+                adTitle.innerHTML = '🥣 Buttercream Tip';
+                adText.innerText = 'Tired of icing sugar clouds? Achieving a silky, ultra-smooth bakery-style frosting is significantly easier with a high-capacity planetary stand mixer.';
+                adLink.innerText = 'View Top Baker Stand Mixers →';
+                adLink.href = 'https://www.amazon.co.uk/s?k=electric+stand+mixer+baking&tag=YOUR_AMAZON_TAG_HERE';
+            }
+            else {
+                adTitle.innerHTML = '⚖️ Precision Scaling Tip';
+                adText.innerText = 'When scaling recipes, you\'ll often end up with fractions of an egg (e.g., 2.4 eggs). The absolute easiest way to handle this is by lightly whisking your eggs in a jug and using an accurate digital kitchen scale to measure the exact amount.';
+                adLink.innerText = 'View Recommended Scales →';
+                adLink.href = 'https://www.amazon.co.uk/s?k=digital+kitchen+scales+0.1g&tag=YOUR_AMAZON_TAG_HERE';
+            }
+        }
+
         function syncComponentName(compId, value) {
             const comp = recipeData.find(c => c.id === compId);
-            if (comp) comp.name = value;
+            if (comp) {
+                comp.name = value;
+                evaluateAllKeywords();
+            }
         }
 
         function silentScaleCalculate() {
@@ -335,9 +415,9 @@
             });
         }
 
+        // Run application
         renderApp();
         calculateScale();
     </script>
 </body>
 </html>
- 
