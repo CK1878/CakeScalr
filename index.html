@@ -15,7 +15,7 @@
         }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800 font-sans antialiased min-h-screen pb-12">
+<body class="bg-slate-50 text-slate-800 font-sans antialiased min-h-screen pb-24">
 
     <!-- Header -->
     <header class="bg-white border-b border-slate-200 py-6 px-4 mb-8 shadow-xs">
@@ -89,6 +89,24 @@
             <!-- Dynamic Components will render here -->
         </div>
 
+        <!-- CONTEXTUAL MONETIZATION TRIGGER (Amazon Affiliate Box) -->
+        <section class="no-print bg-amber-50/60 border border-amber-200/80 rounded-xl p-5 shadow-xs grid sm:grid-cols-3 gap-4 items-center">
+            <div class="sm:col-span-2">
+                <h3 class="text-sm font-bold text-amber-900 flex items-center gap-1.5">
+                    <span class="text-base">⚖️</span> Precision Scaling Tip
+                </h3>
+                <p class="text-xs text-amber-800 mt-1 leading-relaxed">
+                    When scaling recipes, you'll often end up with fractions of an egg (e.g., 2.4 eggs). The absolute easiest way to handle this is by lightly whisking your eggs in a jug and using an accurate digital kitchen scale to measure the exact amount.
+                </p>
+            </div>
+            <div class="text-center sm:text-right">
+                <!-- !!! UPDATE TAG VALUE LATER !!! -->
+                <a href="https://www.amazon.co.uk/s?k=digital+kitchen+scales+0.1g&tag=YOUR_AMAZON_TAG_HERE" target="_blank" rel="noopener" class="inline-block bg-amber-700 hover:bg-amber-800 text-white text-xs font-semibold py-2 px-4 rounded-lg shadow-xs transition-colors cursor-pointer">
+                    View Recommended Scales →
+                </a>
+            </div>
+        </section>
+
         <!-- CONTROL BUTTONS -->
         <section class="no-print flex flex-wrap gap-3 items-center justify-center border-t border-slate-200 pt-6">
             <button onclick="addComponent('Custom Component')" class="bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 text-sm font-medium py-2 px-4 rounded-lg shadow-xs transition-colors cursor-pointer">
@@ -102,7 +120,22 @@
             </button>
         </section>
 
+        <!-- PRINT ONLY FOOTER -->
+        <footer class="hidden print:block text-center text-xs text-slate-400 mt-12 border-t border-slate-200 pt-4">
+            Recipe scaled perfectly using <strong>BakeScale Pro</strong>.<br>
+            Saved you from a baking disaster? Consider tipping a bag of flour at: buymeacoffee.com/YOUR_USERNAME
+        </footer>
+
     </main>
+
+    <!-- FLOATING "BUY ME A BAG OF FLOUR" TIPPING WIDGET -->
+    <div class="fixed bottom-4 right-4 z-50 no-print">
+        <!-- !!! UPDATE URL LATER !!! -->
+        <a href="https://www.buymeacoffee.com/YOUR_USERNAME" target="_blank" rel="noopener" class="flex items-center gap-2 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold py-2.5 px-4 rounded-full shadow-lg transition-all hover:scale-105 cursor-pointer border border-slate-700/50">
+            <span class="text-sm">🌾</span> 
+            <span>Buy me a bag of flour</span>
+        </a>
+    </div>
 
     <script>
         // Core application state
@@ -144,32 +177,26 @@
             const nSize = parseFloat(document.getElementById('newSize').value) || 1;
             const nDepth = parseFloat(document.getElementById('newDepth').value) || 1;
 
-            // Calculate base surface areas
             const oArea = oShape === 'round' ? Math.PI * Math.pow(oSize / 2, 2) : oSize * oSize;
             const nArea = nShape === 'round' ? Math.PI * Math.pow(nSize / 2, 2) : nSize * nSize;
 
-            // Volumes
             const oVolume = oArea * oDepth;
             const nVolume = nArea * nDepth;
 
             scalingFactor = nVolume / oVolume;
 
-            // Update badge UI
             document.getElementById('factorBadge').innerText = `Scale: ${scalingFactor.toFixed(2)}x`;
 
             updateOutputDisplay();
         }
 
-        // Add a complete new component block
         function addComponent(name, isPreset = false, presetKey = '') {
             const compId = "comp_" + Date.now();
             let ingredients = [];
 
             if (isPreset && presets[presetKey]) {
-                // Deep copy preset ingredients
                 ingredients = presets[presetKey].map(ing => ({ ...ing }));
             } else {
-                // Start with one blank row for custom component
                 ingredients = [{ name: "", amount: 0, unit: "g" }];
             }
 
@@ -178,14 +205,12 @@
             calculateScale();
         }
 
-        // Delete an entire component block
         function deleteComponent(compId) {
             recipeData = recipeData.filter(c => c.id !== compId);
             renderApp();
             calculateScale();
         }
 
-        // Add an ingredient row within a component
         function addIngredientRow(compId) {
             const comp = recipeData.find(c => c.id === compId);
             if (comp) {
@@ -195,7 +220,6 @@
             }
         }
 
-        // Remove a specific row
         function deleteIngredientRow(compId, ingIndex) {
             const comp = recipeData.find(c => c.id === compId);
             if (comp) {
@@ -205,7 +229,6 @@
             }
         }
 
-        // Sync inputs back to state object when user types
         function syncData(compId, index, field, value) {
             const comp = recipeData.find(c => c.id === compId);
             if (comp && comp.ingredients[index]) {
@@ -214,8 +237,6 @@
                 } else {
                     comp.ingredients[index][field] = value;
                 }
-                
-                // Real-time calculation without full redraw to maintain text cursor position
                 silentScaleCalculate();
             }
         }
@@ -225,26 +246,22 @@
             if (comp) comp.name = value;
         }
 
-        // Calculate math quietly to update target column instantly without breaking focus
         function silentScaleCalculate() {
             recipeData.forEach(comp => {
                 comp.ingredients.forEach((ing, idx) => {
                     const outputEl = document.getElementById(`out_${comp.id}_${idx}`);
                     if (outputEl) {
                         const scaledVal = ing.amount * scalingFactor;
-                        // Format decimals cleanly
                         outputEl.innerText = scaledVal % 1 === 0 ? scaledVal : scaledVal.toFixed(1);
                     }
                 });
             });
         }
 
-        // Complete data view updating
         function updateOutputDisplay() {
             silentScaleCalculate();
         }
 
-        // Main rendering framework
         function renderApp() {
             const container = document.getElementById('recipeContainer');
             container.innerHTML = "";
@@ -265,19 +282,16 @@
                 comp.ingredients.forEach((ing, idx) => {
                     rowsHtml += `
                     <div class="grid grid-cols-12 gap-2 items-center border-b border-slate-50 py-2 last:border-0">
-                        <!-- Input Name -->
                         <div class="col-span-5 md:col-span-6">
                             <input type="text" value="${ing.name}" placeholder="e.g. Caster Sugar" 
                                 oninput="syncData('${comp.id}', ${idx}, 'name', this.value)"
                                 class="w-full bg-transparent border-b border-transparent hover:border-slate-200 focus:border-slate-400 focus:outline-none p-1 text-sm">
                         </div>
-                        <!-- Base Amount -->
                         <div class="col-span-3 md:col-span-2">
                             <input type="number" value="${ing.amount || ''}" placeholder="0"
                                 oninput="syncData('${comp.id}', ${idx}, 'amount', this.value)"
                                 class="w-full bg-slate-50 border border-slate-200 rounded-md p-1 text-sm text-center focus:outline-slate-300">
                         </div>
-                        <!-- Unit Selection -->
                         <div class="col-span-2 md:col-span-1">
                             <select onchange="syncData('${comp.id}', ${idx}, 'unit', this.value)" class="w-full bg-transparent text-xs text-slate-500 focus:outline-none cursor-pointer">
                                 <option value="g" ${ing.unit === 'g' ? 'selected' : ''}>g</option>
@@ -287,11 +301,9 @@
                                 <option value="tbsp" ${ing.unit === 'tbsp' ? 'selected' : ''}>tbsp</option>
                             </select>
                         </div>
-                        <!-- Scaled Output Display -->
                         <div class="col-span-2 md:col-span-2 text-right font-semibold text-slate-900 pr-2">
                             <span id="out_${comp.id}_${idx}">0</span><span class="text-xs font-normal text-slate-400 ml-0.5">${ing.unit}</span>
                         </div>
-                        <!-- Row Deletion Control -->
                         <div class="col-span-12 md:col-span-1 text-right no-print">
                             <button onclick="deleteIngredientRow('${comp.id}', ${idx})" class="text-slate-300 hover:text-rose-500 text-xs p-1 transition-colors cursor-pointer" title="Remove ingredient">✕</button>
                         </div>
@@ -303,18 +315,15 @@
                         <input type="text" value="${comp.name}" oninput="syncComponentName('${comp.id}', this.value)" class="font-bold text-slate-800 text-lg border-b border-transparent hover:border-slate-200 focus:border-slate-400 focus:outline-none">
                         <button onclick="deleteComponent('${comp.id}')" class="text-xs text-slate-400 hover:text-rose-600 transition-colors cursor-pointer">Delete Component</button>
                     </div>
-                    <!-- Printable Title fallback -->
                     <h2 class="hidden print:block font-bold text-slate-900 text-base mb-2 border-b border-slate-300 pb-1">${comp.name}</h2>
                     
                     <div class="space-y-1">
-                        <!-- Table Column Headers -->
                         <div class="grid grid-cols-12 gap-2 text-xs font-bold text-slate-400 uppercase tracking-wider pb-1 border-b border-slate-100">
                             <div class="col-span-5 md:col-span-6">Ingredient</div>
                             <div class="col-span-3 md:col-span-2 text-center">Original</div>
                             <div class="col-span-2 md:col-span-1">Unit</div>
                             <div class="col-span-2 md:col-span-2 text-right pr-2">New Target</div>
                         </div>
-                        <!-- Rows -->
                         ${rowsHtml}
                     </div>
 
@@ -326,7 +335,6 @@
             });
         }
 
-        // Initialize App Engine
         renderApp();
         calculateScale();
     </script>
