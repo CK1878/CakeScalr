@@ -370,4 +370,54 @@
                         <div class="col-span-3 md:col-span-2">
                             <input type="number" value="${ing.amount || ''}" placeholder="0"
                                 oninput="syncData('${comp.id}', ${idx}, 'amount', this.value)"
-                                class="
+                                class="w-full bg-slate-50 border border-slate-200 rounded-md p-1 text-sm text-center focus:outline-slate-300">
+                        </div>
+                        <div class="col-span-2 md:col-span-1">
+                            <select onchange="syncData('${comp.id}', ${idx}, 'unit', this.value)" class="w-full bg-transparent text-xs text-slate-500 focus:outline-none cursor-pointer">
+                                <option value="g" ${ing.unit === 'g' ? 'selected' : ''}>g</option>
+                                <option value="ml" ${ing.unit === 'ml' ? 'selected' : ''}>ml</option>
+                                <option value="pcs" ${ing.unit === 'pcs' ? 'selected' : ''}>pcs</option>
+                                <option value="tsp" ${ing.unit === 'tsp' ? 'selected' : ''}>tsp</option>
+                                <option value="tbsp" ${ing.unit === 'tbsp' ? 'selected' : ''}>tbsp</option>
+                            </select>
+                        </div>
+                        <div class="col-span-2 md:col-span-2 text-right font-semibold text-slate-900 pr-2">
+                            <span id="out_${comp.id}_${idx}">0</span><span class="text-xs font-normal text-slate-400 ml-0.5">${ing.unit}</span>
+                        </div>
+                        <div class="col-span-12 md:col-span-1 text-right no-print">
+                            <button onclick="deleteIngredientRow('${comp.id}', ${idx})" class="text-slate-300 hover:text-rose-500 text-xs p-1 transition-colors cursor-pointer" title="Remove ingredient">✕</button>
+                        </div>
+                    </div>`;
+                });
+
+                card.innerHTML = `
+                    <div class="flex justify-between items-center border-b border-slate-100 pb-3 mb-4 no-print">
+                        <input type="text" value="${comp.name}" oninput="syncComponentName('${comp.id}', this.value)" class="font-bold text-slate-800 text-lg border-b border-transparent hover:border-slate-200 focus:border-slate-400 focus:outline-none">
+                        <button onclick="deleteComponent('${comp.id}')" class="text-xs text-slate-400 hover:text-rose-600 transition-colors cursor-pointer">Delete Component</button>
+                    </div>
+                    <h2 class="hidden print:block font-bold text-slate-900 text-base mb-2 border-b border-slate-300 pb-1">${comp.name}</h2>
+                    
+                    <div class="space-y-1">
+                        <div class="grid grid-cols-12 gap-2 text-xs font-bold text-slate-400 uppercase tracking-wider pb-1 border-b border-slate-100">
+                            <div class="col-span-5 md:col-span-6">Ingredient</div>
+                            <div class="col-span-3 md:col-span-2 text-center">Original</div>
+                            <div class="col-span-2 md:col-span-1">Unit</div>
+                            <div class="col-span-2 md:col-span-2 text-right pr-2">New Target</div>
+                        </div>
+                        ${rowsHtml}
+                    </div>
+
+                    <div class="mt-4 no-print">
+                        <button onclick="addIngredientRow('${comp.id}')" class="text-xs font-medium text-slate-500 hover:text-slate-800 transition-colors cursor-pointer">+ Add Row</button>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // Run application
+        renderApp();
+        calculateScale();
+    </script>
+</body>
+</html>
