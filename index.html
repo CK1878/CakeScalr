@@ -57,7 +57,6 @@
 
             <!-- Socials & Print Action Controls -->
             <div class="flex items-center gap-4 no-print">
-                <!-- Social Links Placeholder Layout (Ready for URLs later) -->
                 <nav class="flex gap-3 text-xs font-medium text-slate-400 border-r border-slate-200 pr-4 mr-1">
                     <a href="#" class="hover:text-slate-600 transition-colors">Website</a>
                     <a href="#" class="hover:text-slate-600 transition-colors">Instagram</a>
@@ -81,20 +80,25 @@
             <!-- Original Tin -->
             <div class="space-y-4">
                 <h2 class="text-sm font-bold uppercase tracking-wider text-slate-400">Original Tin (From Recipe)</h2>
-                <div class="grid grid-cols-3 gap-2">
-                    <div>
+                <div class="grid grid-cols-4 gap-2">
+                    <div class="col-span-1">
                         <label class="block text-xs font-medium text-slate-500 mb-1">Shape</label>
-                        <select id="origShape" onchange="calculateScale()" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2 text-sm focus:outline-slate-400">
+                        <select id="origShape" onchange="toggleShapeInputs('orig'); calculateScale();" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2 text-sm focus:outline-slate-400">
                             <option value="round">Round</option>
                             <option value="square">Square</option>
+                            <option value="rectangle">Rectangle</option>
                         </select>
                     </div>
-                    <div>
-                        <label class="block text-xs font-medium text-slate-500 mb-1">Size (inches)</label>
-                        <input type="number" id="origSize" value="8" min="1" oninput="calculateScale()" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2 text-sm focus:outline-slate-400">
+                    <!-- This div dynamically changes width depending on layout -->
+                    <div id="origSizeContainer" class="col-span-2">
+                        <label id="origSizeLabel" class="block text-xs font-medium text-slate-500 mb-1">Size (inches)</label>
+                        <div class="flex gap-2">
+                            <input type="number" id="origSize" value="8" min="1" oninput="calculateScale()" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2 text-sm focus:outline-slate-400">
+                            <input type="number" id="origWidth" value="8" min="1" oninput="calculateScale()" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2 text-sm focus:outline-slate-400 hidden" placeholder="Width">
+                        </div>
                     </div>
-                    <div>
-                        <label class="block text-xs font-medium text-slate-500 mb-1">Depth (inches)</label>
+                    <div class="col-span-1">
+                        <label class="block text-xs font-medium text-slate-500 mb-1">Depth (in)</label>
                         <input type="number" id="origDepth" value="2" min="1" oninput="calculateScale()" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2 text-sm focus:outline-slate-400">
                     </div>
                 </div>
@@ -103,20 +107,25 @@
             <!-- New Tin -->
             <div class="space-y-4 border-t md:border-t-0 md:border-l border-slate-100 pt-4 md:pt-0 md:pl-6">
                 <h2 class="text-sm font-bold uppercase tracking-wider text-slate-400">New Target Tin</h2>
-                <div class="grid grid-cols-3 gap-2">
-                    <div>
+                <div class="grid grid-cols-4 gap-2">
+                    <div class="col-span-1">
                         <label class="block text-xs font-medium text-slate-500 mb-1">Shape</label>
-                        <select id="newShape" onchange="calculateScale()" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2 text-sm focus:outline-slate-400">
+                        <select id="newShape" onchange="toggleShapeInputs('new'); calculateScale();" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2 text-sm focus:outline-slate-400">
                             <option value="round">Round</option>
                             <option value="square" selected>Square</option>
+                            <option value="rectangle">Rectangle</option>
                         </select>
                     </div>
-                    <div>
-                        <label class="block text-xs font-medium text-slate-500 mb-1">Size (inches)</label>
-                        <input type="number" id="newSize" value="8" min="1" oninput="calculateScale()" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2 text-sm focus:outline-slate-400">
+                    <!-- This div dynamically changes width depending on layout -->
+                    <div id="newSizeContainer" class="col-span-2">
+                        <label id="newSizeLabel" class="block text-xs font-medium text-slate-500 mb-1">Size (inches)</label>
+                        <div class="flex gap-2">
+                            <input type="number" id="newSize" value="8" min="1" oninput="calculateScale()" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2 text-sm focus:outline-slate-400">
+                            <input type="number" id="newWidth" value="8" min="1" oninput="calculateScale()" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2 text-sm focus:outline-slate-400 hidden" placeholder="Width">
+                        </div>
                     </div>
-                    <div>
-                        <label class="block text-xs font-medium text-slate-500 mb-1">Depth (inches)</label>
+                    <div class="col-span-1">
+                        <label class="block text-xs font-medium text-slate-500 mb-1">Depth (in)</label>
                         <input type="number" id="newDepth" value="2" min="1" oninput="calculateScale()" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2 text-sm focus:outline-slate-400">
                     </div>
                 </div>
@@ -204,18 +213,54 @@
             ]
         };
 
-        // Geometrical volume engine
+        // Dynamically shifts inputs layout when Rectangle is selected
+        function toggleShapeInputs(prefix) {
+            const shape = document.getElementById(`${prefix}Shape`).value;
+            const widthInput = document.getElementById(`${prefix}Width`);
+            const label = document.getElementById(`${prefix}Label`);
+            const mainInput = document.getElementById(`${prefix}Size`);
+
+            if (shape === 'rectangle') {
+                label.innerText = "Length & Width (in)";
+                widthInput.classList.remove('hidden');
+                mainInput.placeholder = "Length";
+            } else {
+                label.innerText = "Size (inches)";
+                widthInput.classList.add('hidden');
+                mainInput.placeholder = "";
+            }
+        }
+
+        // Geometrical volume engine (Now supports Rectangles!)
         function calculateScale() {
             const oShape = document.getElementById('origShape').value;
             const oSize = parseFloat(document.getElementById('origSize').value) || 1;
+            const oWidth = parseFloat(document.getElementById('origWidth').value) || 1;
             const oDepth = parseFloat(document.getElementById('origDepth').value) || 1;
 
             const nShape = document.getElementById('newShape').value;
             const nSize = parseFloat(document.getElementById('newSize').value) || 1;
+            const nWidth = parseFloat(document.getElementById('newWidth').value) || 1;
             const nDepth = parseFloat(document.getElementById('newDepth').value) || 1;
 
-            const oArea = oShape === 'round' ? Math.PI * Math.pow(oSize / 2, 2) : oSize * oSize;
-            const nArea = nShape === 'round' ? Math.PI * Math.pow(nSize / 2, 2) : nSize * nSize;
+            // Handle Surface Area Math
+            let oArea = 0;
+            if (oShape === 'round') {
+                oArea = Math.PI * Math.pow(oSize / 2, 2);
+            } else if (oShape === 'square') {
+                oArea = oSize * oSize;
+            } else if (oShape === 'rectangle') {
+                oArea = oSize * oWidth;
+            }
+
+            let nArea = 0;
+            if (nShape === 'round') {
+                nArea = Math.PI * Math.pow(nSize / 2, 2);
+            } else if (nShape === 'square') {
+                nArea = nSize * nSize;
+            } else if (nShape === 'rectangle') {
+                nArea = nSize * nWidth;
+            }
 
             const oVolume = oArea * oDepth;
             const nVolume = nArea * nDepth;
@@ -420,4 +465,4 @@
         calculateScale();
     </script>
 </body>
-</html> 
+</html>
